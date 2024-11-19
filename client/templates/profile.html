@@ -12,6 +12,10 @@
     <h3>Registration date : {{ user.registration_date }}</h3>
     <h3>Tech stack: {{ user.tech_stack }}</h3>
     <h3>Bio : {{ user.bio }}</h3>
+    {% if user.nickname == current %}
+        <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
+    {% endif %}
+
 {% endblock %}
 
 {% block scripts %}

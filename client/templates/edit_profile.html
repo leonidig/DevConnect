@@ -1,0 +1,29 @@
+
+{% extends '__base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+
+
+<form action="{{ url_for('edit_data', username=username) }}" method="POST">
+
+        <label for="bio">Bio:</label><br>
+        <textarea id="bio" name="bio" rows="4" cols="50" required></textarea><br><br>
+    
+        <label for="tech_stack">Tech Stack:</label><br>
+        <textarea id="tech_stack" name="tech_stack" rows="4" cols="50" required></textarea><br><br>
+    
+        <button type="submit">Enter</button>
+</form>
+    
+</form>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
