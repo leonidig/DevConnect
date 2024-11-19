@@ -1,13 +1,13 @@
-
-from .. import app
+from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, flash, url_for
-
 from flask_login import current_user, login_required, LoginManager, login_user
-from ..forms import RegisterForm, LoginForm
+from flask_login import login_user
 from sqlalchemy import select
 
-from flask_login import login_user
+
+from ..forms import RegisterForm, LoginForm
+from .. import app
 from ..db import Session, User
 
 
@@ -46,6 +46,9 @@ def register_post():
                nickname = form.email.data.split('@')[0],
                email = form.email.data,
                password = pwd,
+               registration_date = datetime.now(),
+               tech_stack = "",
+               bio = ""
            )
            session.add(user)
        return redirect(url_for('login'))

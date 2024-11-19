@@ -1,2 +1,3 @@
 from . import (login,
-               default)
+               default,
+               profile)

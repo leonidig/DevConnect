@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 from flask_login import UserMixin
+
 from .. import Base
 
 class User(Base):
@@ -7,6 +10,9 @@ class User(Base):
     nickname: Mapped[str]
     email: Mapped[str]
     password: Mapped[str]
+    registration_date: Mapped[datetime] = mapped_column(default = datetime.now())
+    tech_stack: Mapped[str] = mapped_column(default = "")
+    bio: Mapped[str] = mapped_column(default = "")
 
 
     def is_active(self) -> bool:
