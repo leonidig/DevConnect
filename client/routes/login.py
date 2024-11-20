@@ -48,7 +48,10 @@ def register_post():
                password = pwd,
                registration_date = datetime.now(),
                tech_stack = "",
-               bio = ""
+               bio = "",
+               telegram_link = "",
+               github_link = "",
+               linkedin_link = ""
            )
            session.add(user)
        return redirect(url_for('login'))

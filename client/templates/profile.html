@@ -12,6 +12,13 @@
     <h3>Registration date : {{ user.registration_date }}</h3>
     <h3>Tech stack: {{ user.tech_stack }}</h3>
     <h3>Bio : {{ user.bio }}</h3>
+    <br>
+    <h2>Social</h2>
+    <ol>
+        <li>Telegram : {{ user.telegram_link }}</li>
+        <li>GitHub : {{ user.github_link }}</li>
+        <li>Linkedn: {{ user.linkedin_link }}</li>
+    </ol>
     {% if user.nickname == current %}
         <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
     {% endif %}
