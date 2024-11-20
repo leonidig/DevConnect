@@ -1,3 +1,3 @@
-from . import (login,
-               default,
-               profile)
+from . import (account,
+               login,
+               default)

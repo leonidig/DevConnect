@@ -93,12 +93,28 @@
                 <a href='/profile/{{ nickname }}' class="nav-link">{{ nickname }}</a>
               </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
           </div>
         </div>
+        <form
+        class="d-flex me-auto"
+        role="search"
+        action="{{ url_for('search_user') }}"
+        method="get"
+        id="sform"
+      >
+        <input
+          class="form-control me-2"
+          type="search"
+          name="query"
+          placeholder="Search"
+          aria-label="Search"
+          value="{{ request.args.get('query', '') }}"
+          id="search"
+        />
+        <button class="btn btn-outline-success" type="submit" id="sub">
+          Search
+        </button>
+      </form>
       </nav>
 
     {% endblock %}

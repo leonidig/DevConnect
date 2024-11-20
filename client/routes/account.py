@@ -42,3 +42,15 @@ def edit_data(username: str):
         )
         session.execute(upd)
         return redirect(url_for("index"))
+
+
+
+@app.get('/search')
+def search_user():
+    query = request.args.get("query", '')
+    if query:
+        with Session.begin() as session:
+            target = session.scalars(select(User).filter(User.nickname.ilike(f'%{query}%'))).all()
+            print("Users found:", [user.nickname for user in target])
+            return render_template("users.html", query=query, users=target)
+    return render_template("index.html", query=query, users=[])
