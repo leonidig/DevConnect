@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from sqlalchemy import select, update
 
@@ -42,9 +42,24 @@ def edit_data(username: str):
         tech_stack = request.form.get("tech_stack")
         bio = request.form.get("bio")
         telegram_link = request.form.get("telegram_link")
+        
+        if telegram_link and not telegram_link.startswith("https://t.me/"):
+            flash("Telegram link must be a valid link type (https://t.me/)")
+            return redirect(url_for("get_edit", username=username))
+
         github_link = request.form.get("github_link")
+        
+        if github_link and not github_link.startswith("https://github.com/"):
+            flash("GitHub link must be a valid link type (https://github.com/)")
+            return redirect(url_for("get_edit", username=username))
+        
         linkedin_link = request.form.get("linkedin_link")
         
+        if linkedin_link and not linkedin_link.startswith("https://www.linkedin.com/in/"):
+            flash("LinkedIn link must be a valid link type (https://www.linkedin.com/in/)")
+            return redirect(url_for("get_edit", username=username))
+        
+
         session.execute(
             update(User)
             .where(User.nickname == username)
@@ -58,7 +73,6 @@ def edit_data(username: str):
         )
 
     return redirect(url_for("index"))
-
 
 
 

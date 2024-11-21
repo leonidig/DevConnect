@@ -76,7 +76,17 @@
 
         <label for="linkedin_link">Linkedin Link: </label><br>
         <textarea name="linkedin_link" id="linkedin_link" cols="25" rows="1" >{{ user.linkedin_link }}</textarea><br><br>
-    
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+    {% endwith %}
+
         <button type="submit">Save Changes</button>
     </form>
 {% endblock %}
