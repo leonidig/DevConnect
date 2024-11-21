@@ -18,10 +18,13 @@ def get_profile(username: str):
         return render_template("profile.html", user=user, current=current)
 
 
-
 @app.get("/edit_profile/<string:username>")
 def get_edit(username: str):
-    return render_template("edit_profile.html", username=username)
+    with Session.begin() as session:
+        user = session.scalar(select(User).where(User.nickname == username))
+        if not user:
+            return "User not found", 404
+        return render_template("edit_profile.html", user=user)
 
 
 @app.post("/edit_profile/<string:username>")
@@ -31,25 +34,31 @@ def edit_data(username: str):
 
     with Session.begin() as session:
         selected_user = session.scalar(select(User).where(User.nickname == username))
-
+        if not selected_user:
+            return "User not found", 404
         if selected_user.nickname != current:
             return "Permission denied 403", 403  
-        
+
         tech_stack = request.form.get("tech_stack")
-        bio = request.form.get("bio") 
+        bio = request.form.get("bio")
         telegram_link = request.form.get("telegram_link")
         github_link = request.form.get("github_link")
         linkedin_link = request.form.get("linkedin_link")
-
-        upd = update(User).where(User.nickname == username).values(
-            tech_stack=tech_stack,
-            bio=bio,
-            telegram_link=telegram_link,
-            github_link=github_link,
-            linkedin_link=linkedin_link
+        
+        session.execute(
+            update(User)
+            .where(User.nickname == username)
+            .values(
+                tech_stack=tech_stack,
+                bio=bio,
+                telegram_link=telegram_link,
+                github_link=github_link,
+                linkedin_link=linkedin_link,
+            )
         )
-        session.execute(upd)
-        return redirect(url_for("index"))
+
+    return redirect(url_for("index"))
+
 
 
 

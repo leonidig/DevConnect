@@ -1,30 +1,84 @@
-
 {% extends '__base.html' %}
 
 {% block title %}Profile {{ user.nickname }}{% endblock %}
 
 {% block styles %}
     {{ super() }}
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #ff9800;
+        }
+        h3 {
+            font-size: 1.5em;
+            color: #ffffff;
+            margin: 10px 0;
+        }
+        ol {
+            font-size: 1.2em;
+            color: #ffffff;
+            margin-left: 20px;
+        }
+        ol li {
+            margin-bottom: 10px;
+        }
+        .profile-container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .profile-container h2 {
+            font-size: 2em;
+            color: #ff9800;
+            margin-top: 40px;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff9800;
+            color: #ffffff;
+            font-size: 1.2em;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #e68900;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-    <h1>Username: {{ user.nickname }}</h1>
-    <h3>Registration date : {{ user.registration_date }}</h3>
-    <h3>Tech stack: {{ user.tech_stack }}</h3>
-    <h3>Bio : {{ user.bio }}</h3>
-    <br>
-    <h2>Social</h2>
-    <ol>
-        <li>Telegram : {{ user.telegram_link }}</li>
-        <li>GitHub : {{ user.github_link }}</li>
-        <li>Linkedn: {{ user.linkedin_link }}</li>
-    </ol>
-    {% if user.nickname == current %}
-        <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
-    {% endif %}
+    <div class="profile-container">
+        <h1>Username: {{ user.nickname }}</h1>
+        <h3>Registration date: {{ user.registration_date }}</h3>
+        <h3>Tech stack: {{ user.tech_stack }}</h3>
+        <h3>Bio: {{ user.bio }}</h3>
+        
+        <h2>Social</h2>
+        <ol>
+            <li>Telegram: <a href="{{ user.telegram_link }}" target="_blank">{{ user.telegram_link }}</a></li>
+            <li>GitHub: <a href="{{ user.github_link }}" target="_blank">{{ user.github_link }}</a></li>
+            <li>LinkedIn: <a href="{{ user.linkedin_link }}" target="_blank">{{ user.linkedin_link }}</a></li>
+        </ol>
 
+        {% if user.nickname == current %}
+            <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block scripts %}
-
+    {{ super() }}
 {% endblock %}
