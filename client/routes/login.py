@@ -22,7 +22,7 @@ def load_user(user_id):
     with Session.begin() as session:
         user = session.scalar(select(User).where(User.id == user_id))
         if user:
-            user = User(email=user.email)
+            user = User(email=user.email, id=user.id)
             return user
     
 

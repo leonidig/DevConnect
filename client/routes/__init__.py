@@ -1,3 +1,4 @@
 from . import (account,
                login,
-               default)
+               default,
+               subscribe)

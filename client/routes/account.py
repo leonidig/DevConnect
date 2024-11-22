@@ -9,13 +9,15 @@ from .. import app
 
 @app.get("/profile/<string:username>")
 def get_profile(username: str):
-    with Session() as session:
+    with Session.begin() as session:
         user = session.scalars(select(User).where(User.nickname == username)).first()
         if not user:
             return "User not found"
         email = current_user.email
         current = email.split("@")[0]
-        return render_template("profile.html", user=user, current=current)
+        user_id = user.id
+        return render_template("profile.html", user=user, current=current, subscribe_to_id=user_id)
+
 
 
 @app.get("/edit_profile/<string:username>")
