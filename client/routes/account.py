@@ -2,9 +2,17 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 from sqlalchemy import select, update
 
-from ..db import Session, User
+from ..db import Session, User, Subscribe
 
 from .. import app
+
+
+def get_subscribers_for_user(user_id: int):
+    with Session.begin() as session:
+        subscriber_ids = session.scalars(select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user_id)).all()
+        subscribers = session.scalars(select(User.nickname).where(User.id.in_(subscriber_ids))).all()
+        return subscribers
+
 
 
 @app.get("/profile/<string:username>")
@@ -15,9 +23,11 @@ def get_profile(username: str):
             return "User not found"
         email = current_user.email
         current = email.split("@")[0]
+        subscribers = get_subscribers_for_user(user.id)
+        print("*" * 80)
+        print(subscribers)
         user_id = user.id
-        return render_template("profile.html", user=user, current=current, subscribe_to_id=user_id)
-
+        return render_template("profile.html", user=user, current=current, subscribe_to_id=user_id, subscribers=subscribers)
 
 
 @app.get("/edit_profile/<string:username>")

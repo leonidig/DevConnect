@@ -39,3 +39,16 @@ def subscribe(subscribe_to_id: int):
 
         flash("Subscribed successfully!")
         return redirect(url_for("get_profile", username=user_to_subscribe.nickname))
+
+
+
+# @app.get("/subscribers/<string:username>")
+# def get_user_subscribers(username: str):
+#     with Session.begin() as session:
+#         user = session.scalar(select(User).where(User.nickname == username))
+#         if not user:
+#             return {"error": "User not found"}, 404
+#         subscriber_ids = session.scalars(select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user.id)).all()
+#         subscribers = session.scalars(select(User.nickname).where(User.id.in_(subscriber_ids))).all()
+#         print(subscribers)
+#         return {"subscribers" : subscribers}
