@@ -11,6 +11,8 @@ from ..db import User, Session, Subscribe
 def subscribe(subscribe_to_id: int):
     with Session.begin() as session:  
         user_to_subscribe = session.scalars(select(User).where(User.id == subscribe_to_id)).first()
+        current = session.scalar(select(User).where(User.email == current_user.email))
+        
 
         if not user_to_subscribe:
             return "User not found", 404
@@ -30,6 +32,8 @@ def subscribe(subscribe_to_id: int):
             subscriber_id=current_user.id,
             subscribed_to_id=user_to_subscribe.id
         )
+        user_to_subscribe.subscribers_count += 1
+        current.subscribtions_count += 1
         session.add(subscription) 
 
 

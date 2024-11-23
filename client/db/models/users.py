@@ -33,7 +33,10 @@ class User(Base):
         back_populates="subscribed_to", 
         cascade="all, delete-orphan",
         foreign_keys="Subscribe.subscribed_to_id" 
+    
     )
+    subscribers_count: Mapped[int] = mapped_column(default = 0)
+    subscribtions_count: Mapped[int] = mapped_column(default = 0)
 
     def is_active(self) -> bool:
         return True

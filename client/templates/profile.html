@@ -12,77 +12,130 @@
             margin: 0;
             padding: 0;
         }
-        h1 {
-            text-align: center;
-            font-size: 2.5em;
-            color: #ff9800;
-        }
-        h3 {
-            font-size: 1.5em;
-            color: #ffffff;
-            margin: 10px 0;
-        }
-        ol {
-            font-size: 1.2em;
-            color: #ffffff;
-            margin-left: 20px;
-        }
-        ol li {
-            margin-bottom: 10px;
-        }
         .profile-container {
-            max-width: 900px;
-            margin: 50px auto;
+            max-width: 800px;
+            margin: 40px auto;
             background-color: #1e1e1e;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        .profile-container h2 {
-            font-size: 2em;
-            color: #ff9800;
-            margin-top: 40px;
+        .left-section {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        a {
+        .left-section h1 {
+            font-size: 2.8em;
+            color: #ff9800;
+        }
+        .left-section .edit-profile a {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #ff9800;
             color: #ffffff;
             font-size: 1.2em;
             border-radius: 5px;
             text-decoration: none;
             transition: background-color 0.3s;
+            margin-top: 15px;
         }
-        a:hover {
+        .left-section .edit-profile a:hover {
             background-color: #e68900;
+        }
+        .social-links {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .social-links a {
+            margin: 0 10px;
+            color: #ff9800;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            color: #e68900;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+        .stats div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1.1em;
+        }
+        .stats svg {
+            fill: currentColor;
+        }
+        .bio {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .bio h3 {
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+        .bio p {
+            margin: 5px 0;
+            line-height: 1.6;
         }
     </style>
 {% endblock %}
 
 {% block content %}
     <div class="profile-container">
-        <h1>Username: {{ user.nickname }}</h1>
-        <h3>Registration date: {{ user.registration_date }}</h3>
-        <h3>Tech stack: {{ user.tech_stack }}</h3>
-        <h3>Bio: {{ user.bio }}</h3>
-        
-        <h2>Social</h2>
-        <ol>
-            <li>Telegram: <a href="{{ user.telegram_link }}" target="_blank">{{ user.telegram_link }}</a></li>
-            <li>GitHub: <a href="{{ user.github_link }}" target="_blank">{{ user.github_link }}</a></li>
-            <li>LinkedIn: <a href="{{ user.linkedin_link }}" target="_blank">{{ user.linkedin_link }}</a></li>
-        </ol>
+        <!-- Левая секция: Никнейм и кнопка -->
+        <div class="left-section">
+            <h1>{{ user.nickname }}</h1>
+            {% if user.nickname != current %}
+                <div class="edit-profile">
+                    <a href="{{ url_for('subscribe', subscribe_to_id=subscribe_to_id) }}" class="subscribe-btn">Subscribe</a>
+                </div>
+            {% else %}
+                <div class="edit-profile">
+                    <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
+                </div>
+            {% endif %}
+        </div>
 
-        
+        <!-- Социальные ссылки -->
+        <div class="social-links">
+            <a href="{{ user.telegram_link }}" target="_blank">Telegram</a>
+            <a href="{{ user.github_link }}" target="_blank">GitHub</a>
+            <a href="{{ user.linkedin_link }}" target="_blank">LinkedIn</a>
+        </div>
 
-        {% if user.nickname != current %}
-            <a href="{{ url_for('subscribe', subscribe_to_id=subscribe_to_id) }}" class="subscribe-btn">Subscribe</a>
-        {% endif %}
+        <!-- Статистика -->
+        <div class="stats">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16" fill="currentColor">
+                    <path d="M0 0h24v24H0V0z" fill="none"/>
+                    <path d="M12 12c2.7 0 5.01-2.3 5.01-5S14.7 2 12 2 6.99 4.3 6.99 7 9.3 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <span><strong>{{ user.subscribers_count }}</strong> followers</span>
+            </div>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16" fill="currentColor">
+                    <path d="M0 0h24v24H0V0z" fill="none"/>
+                    <path d="M12 12c2.7 0 5.01-2.3 5.01-5S14.7 2 12 2 6.99 4.3 6.99 7 9.3 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <span><strong>{{ user.subscribtions_count }}</strong> following</span>
+            </div>
+        </div>
 
-        {% if user.nickname == current %}
-            <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
-        {% endif %}
-
+        <!-- Биография -->
+        <div class="bio">
+            <h3>Tech stack:</h3>
+            <p>{{ user.tech_stack }}</p>
+            <h3>Bio:</h3>
+            <p>{{ user.bio }}</p>
+            <h3>Registration date:</h3>
+            <p>{{ user.registration_date.strftime('%Y-%m-%d %H:%M') }}</p>
+        </div>
     </div>
 {% endblock %}
 
