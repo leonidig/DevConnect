@@ -15,6 +15,7 @@ def get_subscribers_for_user(user_id: int):
 
 
 
+
 @app.get("/profile/<string:username>")
 def get_profile(username: str):
     with Session.begin() as session:
@@ -24,8 +25,6 @@ def get_profile(username: str):
         email = current_user.email
         current = email.split("@")[0]
         subscribers = get_subscribers_for_user(user.id)
-        print("*" * 80)
-        print(subscribers)
         user_id = user.id
         return render_template("profile.html", user=user, current=current, subscribe_to_id=user_id, subscribers=subscribers)
 
@@ -83,7 +82,6 @@ def edit_data(username: str):
                 linkedin_link=linkedin_link,
             )
         )
-
     return redirect(url_for("index"))
 
 
@@ -97,3 +95,6 @@ def search_user():
             print("Users found:", [user.nickname for user in target])
             return render_template("users.html", query=query, users=target)
     return render_template("index.html", query=query, users=[])
+
+
+
