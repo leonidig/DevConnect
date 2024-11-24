@@ -5,6 +5,24 @@
 {% block styles %}
     {{ super() }}
     <style>
+
+        .subscribe-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #ff9800;
+            color: #ffffff;
+            font-size: 1.2em;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none; 
+            cursor: pointer; 
+            transition: background-color 0.3s;
+        }
+        
+        .subscribe-btn:hover {
+            background-color: #e68900;
+        }
+        
         body {
             background-color: #121212;
             color: #ffffff;
@@ -24,7 +42,6 @@
         .left-section {
             flex: 1;
             text-align: center;
-            margin-bottom: 30px;
         }
         .left-section h1 {
             font-size: 2.8em;
@@ -47,7 +64,7 @@
         .right-section {
             flex: 1;
             margin-left: 30px;
-            display: none; /* Initially hide the right section */
+            display: none;
         }
         .social-links {
             text-align: center;
@@ -90,33 +107,35 @@
             margin: 5px 0;
             line-height: 1.6;
         }
-        .subscriber-list {
+        .subscriber-list, .subscriptions-list {
             margin-top: 30px;
             background-color: #252525;
             padding: 20px;
             border-radius: 10px;
         }
-        .subscriber-list h3 {
+        .subscriber-list h3, .subscriptions-list h3 {
             color: #ff9800;
         }
-        .subscriber-list ul {
+        .subscriber-list ul, .subscriptions-list ul {
             list-style-type: none;
             padding: 0;
         }
- 
-
-        .subscriber-list li {
-            list-style-type: none;  
-            margin-left: 10px; 
+        .subscriber-list li, .subscriptions-list li {
+            margin-left: 10px;
         }
-        
-        .bullet {
-            margin-right: 10px; 
+        .subscriber-list .bullet, .subscriptions-list .bullet {
+            margin-right: 10px;
             color: #96a7b9;
         }
-        
-        
-        .toggle-followers-btn {
+        .subscriber-list .subscriber-link, .subscriptions-list .subscription-link {
+            color: #ff9800;
+            text-decoration: none;
+        }
+        .subscriber-list .subscriber-link:hover, .subscriptions-list .subscription-link:hover {
+            color: #e68900;
+            text-decoration: underline;
+        }
+        .toggle-followers-btn, .toggle-followings-btn {
             background-color: #ff9800;
             color: #ffffff;
             padding: 10px 20px;
@@ -126,20 +145,9 @@
             cursor: pointer;
             margin-top: 20px;
         }
-        .toggle-followers-btn:hover {
+        .toggle-followers-btn:hover, .toggle-followings-btn:hover {
             background-color: #e68900;
         }
-
-        .subscriber-link {
-            color: #ff9800;
-            text-decoration: none;
-        }
-        
-        .subscriber-link:hover {
-            color: #e68900;
-            text-decoration: underline;
-        }
-        
     </style>
 {% endblock %}
 
@@ -151,15 +159,19 @@
                 <div class="edit-profile">
                     <a href="{{ url_for('subscribe', subscribe_to_id=user.id) }}" class="subscribe-btn">Subscribe</a>
                 </div>
-                <form action="{{ url_for('unsubscribe', user_id=subscribe_to_id) }}" method="post" style="display:inline;">
-                    <button type="submit" class="unsubscribe-btn">Unsubscribe</button>
-                </form>
+                <br>
+                <div class="edit-profile">
+                    <form action="{{ url_for('unsubscribe', user_id=subscribe_to_id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="subscribe-btn">Unsubscribe</button>
+                    </form>
+                </div>
+                <br>
+                
             {% else %}
                 <div class="edit-profile">
                     <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
                 </div>
             {% endif %}
-
 
             <div class="social-links">
                 <a href="{{ user.telegram_link }}" target="_blank">Telegram</a>
@@ -174,7 +186,7 @@
                         <path d="M12 12c2.7 0 5.01-2.3 5.01-5S14.7 2 12 2 6.99 4.3 6.99 7 9.3 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                     <span>
-                        <span class="toggle-followers-text" onclick="toggleFollowers()">
+                        <span class="toggle-followers-text" onclick="toggleSection('subscribers')">
                             <strong>{{ user.subscribers_count }}</strong> followers
                         </span>
                     </span>
@@ -184,7 +196,11 @@
                         <path d="M0 0h24v24H0V0z" fill="none"/>
                         <path d="M12 12c2.7 0 5.01-2.3 5.01-5S14.7 2 12 2 6.99 4.3 6.99 7 9.3 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
-                    <span><strong>{{ user.subscribtions_count }}</strong> following</span>
+                    <span>
+                        <span class="toggle-followings-text" onclick="toggleSection('followings')">
+                            <strong>{{ user.subscribtions_count }}</strong> following
+                        </span>
+                    </span>
                 </div>
             </div>
 
@@ -198,8 +214,7 @@
             </div>
         </div>
 
-
-        <div class="right-section">
+        <div class="right-section" id="subscribers">
             <div class="subscriber-list">
                 <h3>Subscribers</h3>
                 <ul>
@@ -212,19 +227,29 @@
                 </ul>
             </div>
         </div>
-        
+
+        <div class="right-section" id="followings" style="display: none;">
+            <div class="subscriptions-list">
+                <h3>Subscriptions</h3>
+                <ul>
+                    {% for subscribtion in subscribtions %}
+                        <li>
+                            <span class="bullet">•</span> 
+                            <a href="/profile/{{ subscribtion }}" class="subscription-link">{{ subscribtion }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 
     <script>
-
-        function toggleFollowers() {
-            const rightSection = document.querySelector('.right-section');
-            const currentDisplay = rightSection.style.display;
-
-            if (currentDisplay === 'none' || currentDisplay === '') {
-                rightSection.style.display = 'block';
-            } else {
-                rightSection.style.display = 'none';
+        function toggleSection(section) {
+            const sections = document.querySelectorAll('.right-section');
+            sections.forEach(s => s.style.display = 'none'); 
+            const activeSection = document.getElementById(section);
+            if (activeSection) {
+                activeSection.style.display = 'block'; 
             }
         }
     </script>

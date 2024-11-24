@@ -12,6 +12,13 @@ def get_subscribers_for_user(user_id: int):
         subscriber_ids = session.scalars(select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user_id)).all()
         subscribers = session.scalars(select(User.nickname).where(User.id.in_(subscriber_ids))).all()
         return subscribers
+    
+
+def get_subscriptions_for_user(user_id: int):
+    with Session.begin() as session:
+        subscriptions_ids = session.scalars(select(Subscribe.subscribed_to_id).where(Subscribe.subscriber_id == user_id)).all()
+        subscriptions = session.scalars(select(User.nickname).where(User.id.in_(subscriptions_ids))).all()
+        return subscriptions
 
 
 
@@ -25,8 +32,11 @@ def get_profile(username: str):
         email = current_user.email
         current = email.split("@")[0]
         subscribers = get_subscribers_for_user(user.id)
+        subscribtions = get_subscriptions_for_user(user.id)
         user_id = user.id
-        return render_template("profile.html", user=user, current=current, subscribe_to_id=user_id, subscribers=subscribers)
+        print("*" * 80)
+        print(subscribtions)
+        return render_template("profile.html", user=user, current=current, subscribe_to_id=user_id, subscribtions=subscribtions, subscribers=subscribers)
 
 
 @app.get("/edit_profile/<string:username>")
