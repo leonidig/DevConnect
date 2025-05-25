@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "devconnect"
+version = "0.1.0"
+description = ""
+authors = ["Leonidig <leonid200955@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.1.0"
+fastapi = "^0.115.5"
+flask-wtf = "^1.2.2"
+email-validator = "^2.2.0"
+sqlalchemy = "^2.0.36"
+flask-login = "^0.6.3"
+uvicorn = "^0.32.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

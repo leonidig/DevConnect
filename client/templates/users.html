@@ -1,0 +1,80 @@
+
+{% extends '__base.html' %}
+
+{% block title %}Users{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        .user-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .user-card {
+            background-color: #f9f9f9;
+            padding: 38px;
+            border-radius: 10px;
+            width: 250px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px
+        }
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .user-link {
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .user-nickname {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+        
+        .user-nickname:hover {
+            color: #0056b3;
+        }
+        
+        .user-registration-date {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 5px;
+        }
+        
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{% if users %}
+<div class="user-list">
+    {% for user in users %}
+    <div class="user-card">
+        <a href="/profile/{{ user.nickname }}" class="user-link">
+            <h3 class="user-nickname">{{ user.nickname }}</h3>
+        </a>
+        <p class="user-registration-date">{{ user.registration_date.strftime('%Y-%m-%d %H:%M') }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No users found.</p>
+{% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}

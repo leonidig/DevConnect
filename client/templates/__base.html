@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}DevConnect{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    {% block styles %}
+    <style>
+      
+      body {
+        background-color: #121212;
+        color: #e0e0e0;
+      }
+
+
+      .navbar {
+        background-color: #1e1e1e;
+        border-bottom: 1px solid #2c2c2c;
+      }
+
+      .navbar .navbar-brand,
+      .navbar .nav-link {
+        color: #d6d6d6 !important;
+      }
+
+      .navbar .nav-link:hover,
+      .navbar .nav-link:focus {
+        color: #ffffff !important;
+        text-decoration: underline;
+      }
+
+      .dropdown-menu {
+        background-color: #2e2e2e;
+        border: none;
+      }
+
+      .dropdown-menu .dropdown-item {
+        color: #d6d6d6;
+      }
+
+      .dropdown-menu .dropdown-item:hover {
+        background-color: #444444;
+        color: #ffffff;
+      }
+
+
+      .form-control {
+        background-color: #2c2c2c;
+        color: #e0e0e0;
+        border: 1px solid #444444;
+      }
+
+      .form-control::placeholder {
+        color: #a8a8a8;
+      }
+
+
+      .btn-outline-success {
+        color: #90caf9;
+        border-color: #90caf9;
+      }
+
+      .btn-outline-success:hover {
+        background-color: #90caf9;
+        color: #121212;
+      }
+
+
+      .navbar-toggler {
+        border-color: #444444;
+      }
+
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23d6d6d6' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      }
+    </style>
+    {% endblock %}
+  </head>
+  <body>
+    {% block navigation %}
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">DevConnect</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Dropdown
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a href="/profile/{{ nickname }}" class="nav-link">{{ nickname }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <form
+        class="d-flex me-auto"
+        role="search"
+        action="{{ url_for('search_user') }}"
+        method="get"
+        id="sform"
+      >
+        <input
+          class="form-control me-2"
+          type="search"
+          name="query"
+          placeholder="Search"
+          aria-label="Search"
+          value="{{ request.args.get('query', '') }}"
+          id="search"
+        />
+        <button class="btn btn-outline-success" type="submit" id="sub">
+          Search
+        </button>
+      </form>
+    </nav>
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block scripts %}
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz4fnFO9f2jPZWjz2IBibN1Xhm6HYXwG53gM1mJgOrMgA7B8B93yq6K6p7"
+      crossorigin="anonymous"
+    ></script>
+    {% endblock %}
+  </body>
+</html>

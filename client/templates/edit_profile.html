@@ -1,0 +1,96 @@
+{% extends '__base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0px;
+        }
+        nav.navbar {
+            margin: 0;
+            padding: 0px;
+        }
+        h1 {
+            margin: 0;
+            padding: 20px 0;
+            text-align: center;
+        }
+        form {
+            margin: -11px auto; 
+            width: 60%;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        label {
+            font-weight: bold;
+            color: #ff9800;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            background-color: #2c2c2c;
+            color: #ffffff;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #ff9800;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e68900;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Edit Profile</h1>
+    <form action="{{ url_for('edit_data', username=user.nickname) }}" method="POST">
+        <label for="bio">Bio:</label><br>
+        <textarea id="bio" name="bio" rows="4" cols="50">{{ user.bio }}</textarea><br><br>
+    
+        <label for="tech_stack">Tech Stack:</label><br>
+        <textarea id="tech_stack" name="tech_stack" rows="4" cols="50">{{ user.tech_stack }}</textarea><br><br>
+
+        <label for="telegram_link">Telegram Link: </label><br>
+        <textarea name="telegram_link" id="telegram_link" cols="25" rows="1" >{{ user.telegram_link }}</textarea><br><br>
+
+        <label for="github_link">GitHub Link: </label><br>
+        <textarea name="github_link" id="github_link" cols="25" rows="1" >{{ user.github_link }}</textarea><br><br>
+
+        <label for="linkedin_link">Linkedin Link: </label><br>
+        <textarea name="linkedin_link" id="linkedin_link" cols="25" rows="1" >{{ user.linkedin_link }}</textarea><br><br>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+    {% endwith %}
+
+        <button type="submit">Save Changes</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

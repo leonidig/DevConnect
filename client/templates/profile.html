@@ -1,0 +1,256 @@
+{% extends '__base.html' %}
+
+{% block title %}Profile {{ user.nickname }}{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+
+        .subscribe-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #ff9800;
+            color: #ffffff;
+            font-size: 1.2em;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none; 
+            cursor: pointer; 
+            transition: background-color 0.3s;
+        }
+        
+        .subscribe-btn:hover {
+            background-color: #e68900;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .profile-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .left-section {
+            flex: 1;
+            text-align: center;
+        }
+        .left-section h1 {
+            font-size: 2.8em;
+            color: #ff9800;
+        }
+        .left-section .edit-profile a {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #ff9800;
+            color: #ffffff;
+            font-size: 1.2em;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        .left-section .edit-profile a:hover {
+            background-color: #e68900;
+        }
+        .right-section {
+            flex: 1;
+            margin-left: 30px;
+            display: none;
+        }
+        .social-links {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .social-links a {
+            margin: 0 10px;
+            color: #ff9800;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            color: #e68900;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+        .stats div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1.1em;
+        }
+        .stats svg {
+            fill: currentColor;
+        }
+        .bio {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .bio h3 {
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+        .bio p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        .subscriber-list, .subscriptions-list {
+            margin-top: 30px;
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .subscriber-list h3, .subscriptions-list h3 {
+            color: #ff9800;
+        }
+        .subscriber-list ul, .subscriptions-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .subscriber-list li, .subscriptions-list li {
+            margin-left: 10px;
+        }
+        .subscriber-list .bullet, .subscriptions-list .bullet {
+            margin-right: 10px;
+            color: #96a7b9;
+        }
+        .subscriber-list .subscriber-link, .subscriptions-list .subscription-link {
+            color: #ff9800;
+            text-decoration: none;
+        }
+        .subscriber-list .subscriber-link:hover, .subscriptions-list .subscription-link:hover {
+            color: #e68900;
+            text-decoration: underline;
+        }
+        .toggle-followers-btn, .toggle-followings-btn {
+            background-color: #ff9800;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .toggle-followers-btn:hover, .toggle-followings-btn:hover {
+            background-color: #e68900;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
+        <div class="left-section">
+            <h1>{{ user.nickname }}</h1>
+            {% if user.nickname != current %}
+                <div class="edit-profile">
+                    <a href="{{ url_for('subscribe', subscribe_to_id=user.id) }}" class="subscribe-btn">Subscribe</a>
+                </div>
+                <br>
+                <div class="edit-profile">
+                    <form action="{{ url_for('unsubscribe', user_id=subscribe_to_id) }}" method="post" style="display:inline;">
+                        <button type="submit" class="subscribe-btn">Unsubscribe</button>
+                    </form>
+                </div>
+                <br>
+                
+            {% else %}
+                <div class="edit-profile">
+                    <a href='/edit_profile/{{ user.nickname }}'>Edit My Data</a>
+                </div>
+            {% endif %}
+
+            <div class="social-links">
+                <a href="{{ user.telegram_link }}" target="_blank">Telegram</a>
+                <a href="{{ user.github_link }}" target="_blank">GitHub</a>
+                <a href="{{ user.linkedin_link }}" target="_blank">LinkedIn</a>
+            </div>
+
+            <div class="stats">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16" fill="currentColor">
+                        <path d="M0 0h24v24H0V0z" fill="none"/>
+                        <path d="M12 12c2.7 0 5.01-2.3 5.01-5S14.7 2 12 2 6.99 4.3 6.99 7 9.3 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>
+                        <span class="toggle-followers-text" onclick="toggleSection('subscribers')">
+                            <strong>{{ user.subscribers_count }}</strong> followers
+                        </span>
+                    </span>
+                </div>
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16" fill="currentColor">
+                        <path d="M0 0h24v24H0V0z" fill="none"/>
+                        <path d="M12 12c2.7 0 5.01-2.3 5.01-5S14.7 2 12 2 6.99 4.3 6.99 7 9.3 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span>
+                        <span class="toggle-followings-text" onclick="toggleSection('followings')">
+                            <strong>{{ user.subscribtions_count }}</strong> following
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="bio">
+                <h3>Tech stack:</h3>
+                <p>{{ user.tech_stack }}</p>
+                <h3>Bio:</h3>
+                <p>{{ user.bio }}</p>
+                <h3>Registration date:</h3>
+                <p>{{ user.registration_date.strftime('%Y-%m-%d %H:%M') }}</p>
+            </div>
+        </div>
+
+        <div class="right-section" id="subscribers">
+            <div class="subscriber-list">
+                <h3>Subscribers</h3>
+                <ul>
+                    {% for subscriber in subscribers %}
+                        <li>
+                            <span class="bullet">•</span> 
+                            <a href="/profile/{{ subscriber }}" class="subscriber-link">{{ subscriber }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="right-section" id="followings" style="display: none;">
+            <div class="subscriptions-list">
+                <h3>Subscriptions</h3>
+                <ul>
+                    {% for subscribtion in subscribtions %}
+                        <li>
+                            <span class="bullet">•</span> 
+                            <a href="/profile/{{ subscribtion }}" class="subscription-link">{{ subscribtion }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(section) {
+            const sections = document.querySelectorAll('.right-section');
+            sections.forEach(s => s.style.display = 'none'); 
+            const activeSection = document.getElementById(section);
+            if (activeSection) {
+                activeSection.style.display = 'block'; 
+            }
+        }
+    </script>
+{% endblock %}
